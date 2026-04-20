@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+venv.bak/
+env.bak/
+
+# Django-specific
+*.log
+*.pot
+*.mo
+db.sqlite3
+media/
+static/
+
+# IDE-specific
+.idea/  # PyCharm
+.vscode/ # VS Code (optional, if you have user-specific settings)
+
+# Operating System files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# Sensitive data
+local_settings.py # Or any other file containing sensitive keys/passwords
+.env # Environment file
