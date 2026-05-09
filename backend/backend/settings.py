@@ -47,7 +47,11 @@ CORS_ALLOWED_ORIGINS = [
 # Add Vercel URL from environment
 frontend_url = os.getenv('FRONTEND_URL')
 if frontend_url:
-    CORS_ALLOWED_ORIGINS.append(frontend_url)
+    # Ensure no trailing slash and no path (corsheaders E014 fix)
+    from urllib.parse import urlparse
+    parsed = urlparse(frontend_url)
+    clean_url = f"{parsed.scheme}://{parsed.netloc}"
+    CORS_ALLOWED_ORIGINS.append(clean_url)
 
 CORS_ALLOW_CREDENTIALS = True
 
