@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function ManageUsers() {
-  const [users, setUsers]     = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [error, setError]     = useState("");
-  const [search, setSearch]   = useState("");
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
-  const token   = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
   const headers = { Authorization: `Bearer ${token}` };
 
   const fetchUsers = async () => {
@@ -23,6 +23,7 @@ function ManageUsers() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchUsers(); }, []);
 
   const handleToggleActive = async (user) => {
@@ -70,7 +71,7 @@ function ManageUsers() {
       </div>
 
       {message && <div className="admin-msg success">{message}</div>}
-      {error   && <div className="admin-msg error">{error}</div>}
+      {error && <div className="admin-msg error">{error}</div>}
 
       {loading ? (
         <p className="admin-loading">Loading users...</p>

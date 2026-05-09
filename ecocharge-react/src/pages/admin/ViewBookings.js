@@ -3,13 +3,13 @@ import axios from "axios";
 
 function ViewBookings() {
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading]   = useState(false);
-  const [message, setMessage]   = useState("");
-  const [error, setError]       = useState("");
-  const [filter, setFilter]     = useState("all");
-  const [search, setSearch]     = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
-  const token   = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
   const headers = { Authorization: `Bearer ${token}` };
 
   const fetchBookings = async () => {
@@ -25,6 +25,7 @@ function ViewBookings() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchBookings(); }, []);
 
   const flash = (msg, isErr = false) => {
@@ -100,7 +101,7 @@ function ViewBookings() {
       </div>
 
       {message && <div className="admin-msg success">{message}</div>}
-      {error   && <div className="admin-msg error">{error}</div>}
+      {error && <div className="admin-msg error">{error}</div>}
 
       {loading ? (
         <p className="admin-loading">Loading bookings from database...</p>
@@ -137,8 +138,7 @@ function ViewBookings() {
                     <td>{b.payment_method}</td>
                     <td><strong>₹{b.total_amount}</strong></td>
                     <td>
-                      <span className={`status ${
-                        b.status === "confirmed" ? "available" : "busy"}`}>
+                      <span className={`status ${b.status === "confirmed" ? "available" : "busy"}`}>
                         {b.status}
                       </span>
                     </td>

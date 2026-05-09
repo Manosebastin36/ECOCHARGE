@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ManageStations from "./ManageStations";
-import ManageUsers    from "./ManageUsers";
-import ViewBookings   from "./ViewBookings";
+import ManageUsers from "./ManageUsers";
+import ViewBookings from "./ViewBookings";
 
 function AdminPanel() {
-  const navigate   = useNavigate();
+  const navigate = useNavigate();
   const [tab, setTab] = useState("stations");
 
   // Guard — only admin can access
   useEffect(() => {
-    const token   = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     const isStaff = localStorage.getItem("is_staff");
     if (!token || isStaff !== "true") {
       alert("Access denied. Admins only.");
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -27,8 +27,8 @@ function AdminPanel() {
 
   const tabs = [
     { key: "stations", label: " Manage Stations" },
-    { key: "users",    label: " Manage Users"    },
-    { key: "bookings", label: " View Bookings"   },
+    { key: "users", label: " Manage Users" },
+    { key: "bookings", label: " View Bookings" },
   ];
 
   return (
@@ -70,7 +70,7 @@ function AdminPanel() {
 
         <div className="admin-content">
           {tab === "stations" && <ManageStations />}
-          {tab === "users"    && <ManageUsers />}
+          {tab === "users" && <ManageUsers />}
           {tab === "bookings" && <ViewBookings />}
         </div>
       </main>
