@@ -38,10 +38,15 @@ function Login() {
       localStorage.setItem("is_staff",      res.data.user.is_staff);
 
       // ── Redirect based on role ──────────────────────
-      if (res.data.user.is_staff) {
+      const isStaff = res.data.user.is_staff;
+      console.log("User Role Check:", { username: res.data.user.username, isStaff });
+
+      if (isStaff === true || String(isStaff).toLowerCase() === "true") {
+        console.log("Redirecting to Admin Port...");
         window.location.href = process.env.REACT_APP_ADMIN_URL || "http://localhost:3001";
       } else {
-        navigate("/stations");             // normal user → Stations
+        console.log("Redirecting to User Stations...");
+        navigate("/stations");
       }
 
     } catch (err) {
