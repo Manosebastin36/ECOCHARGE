@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import API from "../../api";
 
 function ManageUsers() {
@@ -9,9 +9,9 @@ function ManageUsers() {
   const [search, setSearch] = useState("");
 
   const token = localStorage.getItem("access_token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await API.get("/users/", { headers });
@@ -21,10 +21,9 @@ function ManageUsers() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [headers]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
   const handleToggleActive = async (user) => {
     try {

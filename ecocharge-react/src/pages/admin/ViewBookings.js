@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import API from "../../api";
 
 function ViewBookings() {
@@ -10,9 +10,9 @@ function ViewBookings() {
   const [search, setSearch] = useState("");
 
   const token = localStorage.getItem("access_token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     try {
       const res = await API.get(
@@ -23,10 +23,9 @@ function ViewBookings() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [headers]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { fetchBookings(); }, []);
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
 
   const flash = (msg, isErr = false) => {
     isErr ? setError(msg) : setMessage(msg);

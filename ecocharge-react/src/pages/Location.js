@@ -90,7 +90,7 @@ function Location() {
   // ── 3. Fetch stations from Django ─────────────────────
   const fetchStations = useCallback(async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/stations/");
+      const res = await API.get("/stations/");
       setStations(res.data);
     } catch {
       setStations([]);

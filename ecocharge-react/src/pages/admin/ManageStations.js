@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import API from "../../api";
 
 const EMPTY = {
@@ -15,16 +15,16 @@ function ManageStations() {
   const [message, setMessage]   = useState("");
   const [error, setError]       = useState("");
 
-  const fetchStations = async () => {
+  const fetchStations = useCallback(async () => {
     try {
       const res = await API.get("/stations/");
       setStations(res.data);
     } catch {
       setError("Failed to load stations.");
     }
-  };
+  }, []);
 
-  useEffect(() => { fetchStations(); }, []);
+  useEffect(() => { fetchStations(); }, [fetchStations]);
 
   const flash = (msg, isErr = false) => {
     isErr ? setError(msg) : setMessage(msg);
