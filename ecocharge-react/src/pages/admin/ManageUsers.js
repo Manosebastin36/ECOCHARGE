@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import API from "../../api";
 
 function ManageUsers() {
@@ -8,31 +8,26 @@ function ManageUsers() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
 
-  const token = localStorage.getItem("access_token");
-  const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
-
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await API.get("/users/", { headers });
+      const res = await API.get("/users/");
       setUsers(res.data);
     } catch {
       setError("Failed to load users.");
     } finally {
       setLoading(false);
     }
-  }, [headers]);
+  }, []);
 
-  useEffect(() => { fetchUsers(); }, [fetchUsers]);
+  useEffect(() => { 
+    fetchUsers(); 
+  }, [fetchUsers]);
 
   const handleToggleActive = async (user) => {
     try {
-      await API.patch(
-        `/users/${user.id}/`,
-        { is_active: !user.is_active },
-        { headers }
-      );
-      setMessage(`user ${user.username} ${user.is_active ? "deactivated" : "activated"}.`);
+      await API.patch(`/users/${user.id}/`, { is_active: !user.is_active });
+      setMessage(`User ${user.username} updated.`);
       fetchUsers();
     } catch {
       setError("Failed to update user.");
@@ -40,9 +35,9 @@ function ManageUsers() {
   };
 
   const handleDelete = async (id, username) => {
-    if (!window.confirm(`Delete user "${username}"? This cannot be undone.`)) return;
+    if (!window.confirm(`Delete user "${username}"?`)) return;
     try {
-      await API.delete(`/users/${id}/`, { headers });
+      await API.delete(`/users/${id}/`);
       setMessage("User deleted.");
       fetchUsers();
     } catch {
@@ -58,7 +53,6 @@ function ManageUsers() {
 
   return (
     <div className="admin-section">
-
       <div className="admin-section-header">
         <p className="admin-count">{users.length} users total</p>
         <input

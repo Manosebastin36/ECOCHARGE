@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import API from "../../api";
 
 function ViewBookings() {
@@ -9,23 +9,21 @@ function ViewBookings() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const token = localStorage.getItem("access_token");
-  const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
-
   const fetchBookings = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await API.get(
-        "/admin/bookings/", { headers });
+      const res = await API.get("/admin/bookings/");
       setBookings(res.data);
     } catch {
       setError("Failed to load bookings.");
     } finally {
       setLoading(false);
     }
-  }, [headers]);
+  }, []);
 
-  useEffect(() => { fetchBookings(); }, [fetchBookings]);
+  useEffect(() => { 
+    fetchBookings(); 
+  }, [fetchBookings]);
 
   const flash = (msg, isErr = false) => {
     isErr ? setError(msg) : setMessage(msg);
@@ -35,9 +33,8 @@ function ViewBookings() {
   const handleCancel = async (id) => {
     if (!window.confirm("Cancel this booking?")) return;
     try {
-      await API.delete(
-        `/bookings/${id}/`, { headers });
-      flash(" Booking cancelled. Station set back to Available.");
+      await API.delete(`/bookings/${id}/`);
+      flash(" Booking cancelled.");
       fetchBookings();
     } catch {
       flash("Failed to cancel booking.", true);
@@ -58,8 +55,6 @@ function ViewBookings() {
 
   return (
     <div className="admin-section">
-
-      {/* Stats */}
       <div className="admin-stats-row">
         <div className="admin-stat-card">
           <span className="stat-num">{bookings.length}</span>
@@ -83,7 +78,6 @@ function ViewBookings() {
         </div>
       </div>
 
-      {/* Filter + Search */}
       <div className="admin-section-header">
         <div className="admin-filter-tabs">
           {["all", "confirmed", "cancelled"].map((f) => (
@@ -103,7 +97,7 @@ function ViewBookings() {
       {error && <div className="admin-msg error">{error}</div>}
 
       {loading ? (
-        <p className="admin-loading">Loading bookings from database...</p>
+        <p className="admin-loading">Loading bookings...</p>
       ) : (
         <div className="admin-table-wrap">
           <table className="admin-table">
@@ -122,11 +116,7 @@ function ViewBookings() {
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan="9" className="admin-empty">
-                    No bookings found.
-                  </td>
-                </tr>
+                <tr><td colSpan="9" className="admin-empty">No bookings found.</td></tr>
               ) : (
                 filtered.map((b, i) => (
                   <tr key={b.id}>
@@ -145,13 +135,10 @@ function ViewBookings() {
                       {new Date(b.created_at).toLocaleDateString("en-IN")}
                     </td>
                     <td>
-                      {b.status === "confirmed" ? (
-                        <button className="admin-btn-delete"
-                          onClick={() => handleCancel(b.id)}>
+                      {b.status === "confirmed" && (
+                        <button className="admin-btn-delete" onClick={() => handleCancel(b.id)}>
                           Cancel
                         </button>
-                      ) : (
-                        <span style={{ color: "#aaa", fontSize: "0.8rem" }}>—</span>
                       )}
                     </td>
                   </tr>
