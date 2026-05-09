@@ -129,10 +129,13 @@ function Navbar() {
               </Link>
 
               {user.isStaff && (
-                <Link to="/admin-panel" className="profile-menu-item"
-                  onClick={() => setProfileOpen(false)}>
+                <a 
+                  href={process.env.REACT_APP_ADMIN_URL || "http://localhost:3001"} 
+                  className="profile-menu-item"
+                  rel="noopener noreferrer"
+                >
                   Admin Panel
-                </Link>
+                </a>
               )}
 
               <hr className="profile-divider" />

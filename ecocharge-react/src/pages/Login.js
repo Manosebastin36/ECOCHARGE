@@ -39,7 +39,7 @@ function Login() {
 
       // ── Redirect based on role ──────────────────────
       if (res.data.user.is_staff) {
-        navigate("/admin-panel");          // admin → Admin Panel
+        window.location.href = process.env.REACT_APP_ADMIN_URL || "http://localhost:3001";
       } else {
         navigate("/stations");             // normal user → Stations
       }
