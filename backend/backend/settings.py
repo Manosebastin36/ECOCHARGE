@@ -1,12 +1,13 @@
 from pathlib import Path
 from datetime import timedelta
-
+import os
+import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ── Security ───────────────────────────────────────────────
-SECRET_KEY = 'django-insecure-change-this-in-production'
-DEBUG      = True
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-this')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = ['*'] # In production, you can limit this to your Render URL
 
 # ── Installed Apps ─────────────────────────────────────────
 INSTALLED_APPS = [
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
 # ── Middleware ─────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,17 +68,10 @@ TEMPLATES = [
 
 # ── Database ───────────────────────────────────────────────
 DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.mysql',
-        'NAME':     'ecocharge_db',
-        'USER':     'root',
-        'PASSWORD': 'root123',
-        'HOST':     '127.0.0.1',
-        'PORT':     '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'mysql://root:root123@127.0.0.1:3306/ecocharge_db'),
+        conn_max_age=600,
+    )
 }
 
 # ── Auth validators ────────────────────────────────────────
@@ -93,6 +88,11 @@ USE_TZ        = True
 
 # ── Static & Media ─────────────────────────────────────────
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Use Whitenoise to serve static files in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

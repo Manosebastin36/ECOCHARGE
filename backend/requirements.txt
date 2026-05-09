@@ -1,0 +1,9 @@
+django
+djangorestframework
+django-cors-headers
+mysqlclient
+dj-database-url
+whitenoise
+gunicorn
+djangorestframework-simplejwt
+python-dotenv
