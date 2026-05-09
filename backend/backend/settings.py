@@ -78,8 +78,9 @@ DATABASES = {
 if DATABASES['default'].get('HOST') and 'tidbcloud.com' in DATABASES['default']['HOST']:
     DATABASES['default']['OPTIONS'] = {
         'ssl': {
-            'ca': '/etc/ssl/certs/ca-certificates.crt'  # Default CA path on Render/Linux
-        }
+            'ca': '/etc/ssl/certs/ca-certificates.crt'
+        },
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'",
     }
 
 # ── Auth validators ────────────────────────────────────────
