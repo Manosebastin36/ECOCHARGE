@@ -74,6 +74,14 @@ DATABASES = {
     )
 }
 
+# ✅ FIX: Force SSL for TiDB Cloud Serverless
+if DATABASES['default'].get('HOST') and 'tidbcloud.com' in DATABASES['default']['HOST']:
+    DATABASES['default']['OPTIONS'] = {
+        'ssl': {
+            'ca': '/etc/ssl/certs/ca-certificates.crt'  # Default CA path on Render/Linux
+        }
+    }
+
 # ── Auth validators ────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
