@@ -53,7 +53,7 @@ function Register() {
 
         setError("Registration failed. Please try again.");
       } else if (err.request) {
-        setError("Cannot connect to server. Make sure Django is running on port 8000.");
+        setError("Cannot connect to server. Please try again later.");
       } else {
         setError("Something went wrong. Please try again.");
       }
