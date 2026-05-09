@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import StationCard from "../components/StationCard";
-import axios from "axios";
+import API from "../api";
 
 function Stations() {
   const [stations, setStations] = useState([]);
@@ -12,7 +12,7 @@ function Stations() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/stations/");
+      const res = await API.get("/stations/");
       setStations(res.data);
     } catch {
       setError("Failed to load stations. Make sure the server is running.");

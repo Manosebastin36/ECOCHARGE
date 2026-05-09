@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
@@ -24,8 +24,8 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
+      const res = await API.post(
+        "/login/",
         { username: form.username.trim(), password: form.password.trim() },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -51,7 +51,7 @@ function Login() {
           || "Login failed. Please try again.";
         setError(msg);
       } else if (err.request) {
-        setError("Cannot connect to server. Make sure Django is running on port 8000.");
+        setError("Cannot connect to server. Please try again later.");
       } else {
         setError("Something went wrong. Please try again.");
       }

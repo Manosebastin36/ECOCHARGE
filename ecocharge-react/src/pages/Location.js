@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import axios from "axios";
+import API from "../api";
 
 function Location() {
   const [stations, setStations] = useState([]);

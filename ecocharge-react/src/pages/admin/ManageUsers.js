@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../api";
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -14,7 +14,7 @@ function ManageUsers() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/users/", { headers });
+      const res = await API.get("/users/", { headers });
       setUsers(res.data);
     } catch {
       setError("Failed to load users.");
@@ -28,8 +28,8 @@ function ManageUsers() {
 
   const handleToggleActive = async (user) => {
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/users/${user.id}/`,
+      await API.patch(
+        `/users/${user.id}/`,
         { is_active: !user.is_active },
         { headers }
       );
@@ -43,7 +43,7 @@ function ManageUsers() {
   const handleDelete = async (id, username) => {
     if (!window.confirm(`Delete user "${username}"? This cannot be undone.`)) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/users/${id}/`, { headers });
+      await API.delete(`/users/${id}/`, { headers });
       setMessage("User deleted.");
       fetchUsers();
     } catch {

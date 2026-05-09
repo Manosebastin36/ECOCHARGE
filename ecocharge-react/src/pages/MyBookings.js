@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import API from "../api";
 import { useNavigate } from "react-router-dom";
 
 function MyBookings() {
@@ -27,8 +26,8 @@ function MyBookings() {
     setError("");
 
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:8000/api/bookings/",
+      const res = await API.get(
+        "/bookings/",
         {
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -53,7 +52,7 @@ function MyBookings() {
       } else if (err.response?.status === 403) {
         setError("Access denied. Please login again.");
       } else if (!err.response) {
-        setError("Cannot connect to server. Make sure Django is running on port 8000.");
+        setError("Cannot connect to server. Please try again later.");
       } else {
         setError("Failed to load bookings. Please try again.");
       }
@@ -72,8 +71,8 @@ function MyBookings() {
     if (!window.confirm(`Cancel booking for "${stationName}"?`)) return;
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/bookings/${id}/`,
+      await API.delete(
+        `/bookings/${id}/`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessage(" Booking cancelled. Station is now Available.");

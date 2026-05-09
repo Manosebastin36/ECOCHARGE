@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../api";
 
 function ViewBookings() {
   const [bookings, setBookings] = useState([]);
@@ -15,8 +15,8 @@ function ViewBookings() {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:8000/api/admin/bookings/", { headers });
+      const res = await API.get(
+        "/admin/bookings/", { headers });
       setBookings(res.data);
     } catch {
       setError("Failed to load bookings.");
@@ -36,8 +36,8 @@ function ViewBookings() {
   const handleCancel = async (id) => {
     if (!window.confirm("Cancel this booking?")) return;
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/bookings/${id}/`, { headers });
+      await API.delete(
+        `/bookings/${id}/`, { headers });
       flash(" Booking cancelled. Station set back to Available.");
       fetchBookings();
     } catch {

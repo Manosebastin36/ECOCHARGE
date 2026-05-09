@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 
 function Booking() {
   const location = useLocation();
@@ -42,15 +40,14 @@ function Booking() {
     }
 
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/api/bookings/",
+      await API.post(
+        "/bookings/",
         {
           station_id:       station.id,
           station_name:     station.name,
           station_location: station.location,
           payment_method:   paymentMethod,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
+        }
       );
 
       // Update localStorage — Stations page will re-fetch on focus

@@ -1,22 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../api";
 
 const EMPTY = {
   name: "", location: "", status: "Available",
   charger_type: "Type 2", power_kw: "22", lat: "", lng: "",
 };
-
-// Create axios instance with token always attached
-function getAxios() {
-  const token = localStorage.getItem("access_token");
-  return axios.create({
-    baseURL: "http://127.0.0.1:8000/api/",
-    headers: {
-      "Content-Type":  "application/json",
-      "Authorization": token ? `Bearer ${token}` : "",
-    },
-  });
-}
 
 function ManageStations() {
   const [stations, setStations] = useState([]);
@@ -29,7 +16,7 @@ function ManageStations() {
 
   const fetchStations = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/stations/");
+      const res = await API.get("/stations/");
       setStations(res.data);
     } catch {
       setError("Failed to load stations.");
@@ -59,14 +46,14 @@ function ManageStations() {
       return;
     }
 
-    const api = getAxios();
+    const api = API;
 
     try {
       if (editId) {
-        await api.put(`stations/${editId}/`, form);
+        await api.put(`/stations/${editId}/`, form);
         flash("Station updated successfully!");
       } else {
-        await api.post("stations/", form);
+        await api.post("/stations/", form);
         flash("Station added successfully!");
       }
       setForm(EMPTY); setEditId(null); setShowForm(false);
@@ -99,7 +86,7 @@ function ManageStations() {
   const handleToggle = async (s) => {
     const newStatus = s.status === "Available" ? "Busy" : "Available";
     try {
-      await getAxios().patch(`stations/${s.id}/`, { status: newStatus });
+      await API.patch(`/stations/${s.id}/`, { status: newStatus });
       flash(` ${s.name} → ${newStatus}`);
       fetchStations();
     } catch (err) {
@@ -112,7 +99,7 @@ function ManageStations() {
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Delete station "${name}"?`)) return;
     try {
-      await getAxios().delete(`stations/${id}/`);
+      await API.delete(`/stations/${id}/`);
       flash("Station deleted.");
       fetchStations();
     } catch (err) {
