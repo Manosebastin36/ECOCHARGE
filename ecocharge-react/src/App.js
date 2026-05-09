@@ -12,7 +12,6 @@ import Location from "./pages/Location";
 import Booking from "./pages/Booking";
 import Contact from "./pages/Contact";
 import MyBookings from "./pages/MyBookings";
-import AdminPanel from "./pages/admin/AdminPanel";
 
 // inside <Routes>
 
@@ -37,8 +36,6 @@ function Layout() {
         <Route path="/register" element={<Register />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/admin-panel" element={<AdminPanel />} />
-
       </Routes>
 
       {!hideFooter.includes(location.pathname) && <Footer />}
